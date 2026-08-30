@@ -1,1 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoteNest</title>
 
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6fb;
+            color: #222;
+        }
+
+        header {
+            background: white;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 36px;
+        }
+
+        header p {
+            margin: 8px 0 0;
+            color: #666;
+        }
+
+        main {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            min-height: 220px;
+            resize: vertical;
+        }
+
+        button {
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .organize {
+            background: #222;
+            color: white;
+        }
+
+        .print {
+            background: #eee;
+        }
+
+        #studySheet {
+            display: none;
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+
+        .section h3 {
+            margin-bottom: 8px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #777;
+        }
+
+        @media print {
+            header, .input-card, footer, .print {
+                display: none;
+            }
+
+            #studySheet {
+                display: block;
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>🪺 NoteNest</h1>
+    <p>Your notes, organized.</p>
+</header>
+
+<main>
+
+    <div class="card input-card">
+        <label for="subject">Subject</label>
+
+        <select id="subject">
+            <option>Math</option>
+            <option>Science</option>
+            <option>English</option>
+            <option>History</option>
+            <option>Other</option>
+        </select>
+
+        <label for="notes">Paste or type your notes</label>
+
+        <textarea id="notes" placeholder="Put your class notes here..."></textarea>
+
+        <button class="organize" onclick="organizeNotes()">
+            ✨ Organize Notes
+        </button>
+    </div>
+
+    <div class="card" id="studySheet">
+
+        <h2 id="sheetTitle">Study Sheet</h2>
+
+        <div class="section">
+            <h3>⭐ Main Ideas</h3>
+            <p id="mainIdeas"></p>
+        </div>
+
+        <div class="section">
+            <h3>📌 Important Information</h3>
+            <p id="importantInfo"></p>
+        </div>
+
+        <div class="section">
+            <h3>📖 Notes to Review</h3>
+            <p id="reviewNotes"></p>
+        </div>
+
+        <button class="print" onclick="window.print()">
+            🖨️ Print Study Sheet
+        </button>
+
+    </div>
+
+</main>
+
+<footer>
+    NoteNest • Study smarter, not harder.
+</footer>
+
+<script>
+    function organizeNotes() {
+
+        const notes = document.getElementById("notes").value;
+        const subject = document.getElementById("subject").value;
+
+        if (notes.trim() === "") {
+            alert("Please enter some notes first!");
+            return;
+        }
+
+        const sentences = notes
+            .split(/[.!?]+/)
+            .map(sentence => sentence.trim())
+            .filter(sentence => sentence.length > 0);
+
+        document.getElementById("sheetTitle").textContent =
+            subject + " Study Sheet";
+
+        document.getElementById("mainIdeas").textContent =
+            sentences.slice(0, 3).join(". ") + ".";
+
+        document.getElementById("importantInfo").textContent =
+            sentences.slice(3, 6).join(". ") || "Add more notes to find important information.";
+
+        document.getElementById("reviewNotes").textContent =
+            sentences.slice(6).join(". ") || "No extra notes to review.";
+
+        document.getElementById("studySheet").style.display = "block";
+    }
+</script>
+
+</body>
+</html>
